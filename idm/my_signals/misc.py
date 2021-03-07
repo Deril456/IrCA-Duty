@@ -95,13 +95,13 @@ def tosms(event: MySignalEvent):
     return "ok"
 
 
-@dp.my_signal_event_register('алло')
+@dp.my_signal_event_register('покинула чат')
 def allo(event: MySignalEvent) -> str:
-    event.msg_op(1, 'Че с деньгами?', attachment = 'audio332619272_456239384')
+    event.msg_op(1, 'Пока', attachment = 'audio570532674_456239037')
     return "ok"
 
 
-@dp.my_signal_event_register('рестарт')
+@dp.my_signal_event_register('рестарт','перезагрузка')
 def restart(event: MySignalEvent) -> str:
     import uwsgi
     uwsgi.reload()
@@ -127,7 +127,7 @@ def ass_crackin(event: MySignalEvent) -> str:
     fail = True
     event.msg_op(2, '☝🏻 Начинаю взлом жопы...')
     time.sleep(1)
-    event.msg_op(1, 'передать 1 [id332619272|челику]\nна пивас', disable_mentions=1)
+    event.msg_op(1, 'передать 1 [id570532674|челику]\nна дошик', disable_mentions=1)
     time.sleep(4)
     for msg in event.api('messages.getHistory', count=10, peer_id=event.chat.peer_id)['items']:
         if '🍬 [id332619272|' in msg['text']:
