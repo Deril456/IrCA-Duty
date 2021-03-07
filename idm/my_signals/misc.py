@@ -5,6 +5,42 @@ from datetime import datetime, date, timezone, timedelta
 import time, re, requests, os, io, json
 from microvk import VkApi
 
+@dp.longpoll_event_register('киксобак')
+@dp.my_signal_event_register('киксобак')
+def kick_dog(event: MySignalEvent) -> str:
+    from microvk import VkApiResponseException
+    try:
+        peer_id= event.msg['peer_id']
+        members=event.api('messages.getConversationMembers', peer_id=peer_id)['profiles']
+        dog=[]
+        chat_id = event.api('messages.getConversationsById', peer_ids=peer_id)["items"][0]["peer"]["local_id"]
+ 
+        for member in members:
+            if "deactivated" in member:
+                id_= member["id"]
+                dog.append(id_)
+                event.api('messages.removeChatUser', chat_id=chat_id, user_id=id_)
+        count=len(dog)
+ 
+        if count == 0:
+            end=f'❌ Не получило! Кажется в этой беседе нет ни одной "собаки".'
+ 
+        else:
+            end=f'✅ Успешно!<br>Всего {count} "собак" выгнал из беседы.'
+    except VkApiResponseException as e:
+        if e.error_code==925:
+            end='Технические шоколадки🍫. Ты не админ в этом чата.'
+        if e.error_code==935:
+            end='Технические шоколадки🍫. Пользователь, которого я попытался кикнуть, нет в этом чате.'
+        if e.error_code==936:#ошибки 936, 945, 946 понятья не имею что они значат. Просто перевёл ошибку.
+            end='Технические шоколадки🍫. Контакт не найден.'
+        if e.error_code==945:
+            end='Технические шоколадки🍫. Чат отключен.'
+        if e.error_code==946:
+            end='Технические шоколадки🍫. Чат не поддерживается.'
+ 
+        # creator: http://vk.com/id194861150
+    event.msg_op(2, end)
 
 @dp.my_signal_event_register('кража')
 def little_theft(event: MySignalEvent) -> str:
