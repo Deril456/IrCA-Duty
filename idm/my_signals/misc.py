@@ -273,9 +273,9 @@ def status(event: MySignalEvent) -> str:
     return "ok"
 
 
-@dp.my_signal_event_register('бот')
+@dp.my_signal_event_register('банан')
 def imhere(event: MySignalEvent) -> str:
-    event.msg_op(1, sticker_id=11247)
+    event.msg_op(1, sticker_id=57283)
     return "ok"
 
 
